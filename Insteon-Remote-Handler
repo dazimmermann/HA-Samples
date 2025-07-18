@@ -1,0 +1,60 @@
+alias: Insteon Mini-Remote - Office
+description: "This is a handler for an Insteon Mini Remote. Put your Insteon mini-remote's address in the placeholders under event_data address below."
+trigger:
+  - platform: event
+    event_type: insteon.button_on
+    event_data:
+      address: <your address here in xxxxxx format, no quotes or separators, just 6 hex digits>
+  - platform: event
+    event_type: insteon.button_off
+    event_data:
+      address: <your address here in xxxxxx format, no quotes or separators, just 6 hex digits>
+
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.button == 'A' and trigger.event.event_type == 'insteon.button_on' }}"
+        sequence:
+          - service: script.office_remote_a_on
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.button == 'A' and trigger.event.event_type == 'insteon.button_off' }}"
+        sequence:
+          - service: script.office_remote_a_off
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.button == 'B' and trigger.event.event_type == 'insteon.button_on' }}"
+        sequence:
+          - service: script.office_remote_b_on
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.button == 'B' and trigger.event.event_type == 'insteon.button_off' }}"
+        sequence:
+          - service: script.office_remote_b_off
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.button == 'C' and trigger.event.event_type == 'insteon.button_on' }}"
+        sequence:
+          - service: script.office_remote_c_on
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.button == 'C' and trigger.event.event_type == 'insteon.button_off' }}"
+        sequence:
+          - service: script.office_remote_c_off
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.button == 'D' and trigger.event.event_type == 'insteon.button_on' }}"
+        sequence:
+          - service: script.office_remote_d_on
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.button == 'D' and trigger.event.event_type == 'insteon.button_off' }}"
+        sequence:
+          - service: script.office_remote_d_off
+    default:
+      - service: notify.persistent_notification
+        data:
+          message: >-
+            Unhandled button {{ trigger.event.data.button }} event: {{
+            trigger.event.event_type }}
